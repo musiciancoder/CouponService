@@ -3,9 +3,7 @@ package com.bharath.springcloud.couponservice.model.controllers;
 import com.bharath.springcloud.couponservice.model.Coupon;
 import com.bharath.springcloud.couponservice.repos.CouponRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/couponapi")
@@ -15,12 +13,12 @@ public class CouponRestController {
     CouponRepo repo;
 
     @RequestMapping(value = "/coupons", method = RequestMethod.POST)
-    public Coupon create (Coupon coupon){
+    public Coupon create (@RequestBody Coupon coupon){
         return repo.save(coupon);
     }
 
     @RequestMapping(value = "/coupons/{code}", method = RequestMethod.GET)
-    public Coupon getCoupon (String code){
+    public Coupon getCoupon (@PathVariable("code") String code){
         return repo.findByCode(code);
     }
 }

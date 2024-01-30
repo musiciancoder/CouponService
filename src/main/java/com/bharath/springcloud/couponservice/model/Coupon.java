@@ -14,7 +14,7 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
-    private BigDecimal discount; //el tipo en la tabla (creada previamente en mysql workbench) es decimal
+    private BigDecimal dicount; //el tipo en la tabla (creada previamente en mysql workbench) es decimal
     private String expDate;
 
     public Long getId() {
@@ -33,12 +33,12 @@ public class Coupon {
         this.code = code;
     }
 
-    public BigDecimal getDiscount() {
-        return discount;
+    public BigDecimal getDicount() {
+        return dicount;
     }
 
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
+    public void setDicount(BigDecimal discount) {
+        this.dicount = discount;
     }
 
     public String getExpDate() {
