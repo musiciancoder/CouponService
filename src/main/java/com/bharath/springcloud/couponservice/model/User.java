@@ -1,9 +1,8 @@
 package com.bharath.springcloud.couponservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class User {
@@ -15,6 +14,11 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    //esto es para la tabla intermedia user_role que tenemos creada en myswl workbench
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public Long getId() {
         return id;

@@ -1,12 +1,10 @@
 package com.bharath.springcloud.couponservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
+import java.util.Set;
 
 @Entity
 public class Role implements GrantedAuthority {
@@ -17,6 +15,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @ManyToMany(mappedBy = "roles") // con mappedBy = "roles" le decimos que ocupe las mismas anotaciones que definimos en la clase User para  private Set<Role> roles;
+    private Set<User> users;
 
     public Long getId() {
         return id;
