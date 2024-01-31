@@ -1,4 +1,4 @@
-package com.bharath.springcloud.couponservice.model.controllers;
+package com.bharath.springcloud.couponservice.controllers;
 
 import com.bharath.springcloud.couponservice.model.Coupon;
 import com.bharath.springcloud.couponservice.repos.CouponRepo;
