@@ -1,44 +1,61 @@
 package com.bharath.springcloud.couponservice.security.config;
 
+
+
+import java.util.List;
+
+import com.bharath.springcloud.couponservice.security.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-
-/*
-Mark it with at configuration annotation.The first bean is the Bcrypt password encoder in earlier versions of spring boot before 3.0, we had
-to inject this user detail service (usualmente era llamado UserDetailsSerciceImpl) and configure it manually, but with version 3.0 and above, we no longer have to do it.
-Spring security will automatically try to find a bean or a class that implements the user details service and it will use it.
-We only need to configure the Bcrypt password Encoder Bcrypt Password Encoder Call this method Password Encoder.
- */
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 
-@Configuration
-public class WebSecurityConfig { //class containing config beans
 
-    /*
-    So this encoder will be used when the requests come in to encode the password and compare with what we have in the database.
-     */
+//@Configuration
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta clase la copié y pegué desde github, en vista y considerando que apareció por arte de magia en la clase llamada "Test".
+   // Apartir de este punto el código me dejó de funcionar, por lo que solo sirve como apoyo para ver apuntes.
+
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+    }
+
+
+    //En este método definió q para leer un cupon (con la peticion GET) cualquier rol puede hacerlo, pero para crear un cupon (peticion POST) tiene que tener rol "ADMIN".
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .mvcMatchers(HttpMethod.GET, "/couponapi/coupons/{code:^[A-Z]*$}", "/index", "/showGetCoupon",
+                        "/getCoupon", "/couponDetails")
+                .hasAnyRole("USER", "ADMIN")
+                .mvcMatchers(HttpMethod.GET, "/showCreateCoupon", "/createCoupon", "/createResponse").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/getCoupon").hasAnyRole("USER", "ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/couponapi/coupons", "/saveCoupon", "/getCoupon").hasRole("ADMIN")
+                .mvcMatchers("/", "/login", "/logout", "/showReg", "/registerUser").permitAll().anyRequest().denyAll()
+                .and().logout().logoutSuccessUrl("/");
+
+    }
+
     @Bean
-    BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Override
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http){
-
-            http.httpBasic();
-            http.authorizeHttpRequests()
-        .requestMatchers(HttpMethod.GET, "/couponapi/coupons/**") //a esta url...
-                    .hasAnyRole("USER","ADMIN") //...pueden acceder usuarios que tengan cualquiera de estos roles roles (user o admin)
-                    .requestMatchers(HttpMethod.POST,"/couponapi/coupons")
-                    .hasAnyRole("ADMIN")//solo usuarios con rol admin podrán guardar datos
-                    .and().csrf().disable(); //que no pesque los cfrs o cors porque vienen activados para POST por defecto y si lo dejamos por defecto va a fallar*/
-            return null;
-
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 }
-

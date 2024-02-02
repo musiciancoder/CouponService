@@ -1,9 +1,9 @@
 package com.bharath.springcloud.couponservice.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.io.Serial;
+
 import java.util.Set;
 
 @Entity

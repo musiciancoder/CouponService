@@ -1,4 +1,4 @@
-package com.bharath.springcloud.couponservice.security.config;
+package com.bharath.springcloud.couponservice.security;
 
 import com.bharath.springcloud.couponservice.model.User;
 import com.bharath.springcloud.couponservice.repos.UserRepo;

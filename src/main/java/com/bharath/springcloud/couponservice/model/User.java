@@ -1,6 +1,6 @@
 package com.bharath.springcloud.couponservice.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.Set;
 
