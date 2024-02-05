@@ -18,12 +18,12 @@ public class CouponController {
     @Autowired
     private CouponRepo repo;
 
-    @GetMapping("/showCreateCoupon")
+    @GetMapping("/showCreateCoupon") // esta ruta esta en los html
     public String showCreateCoupon() {
         return "createCoupon";
     }
 
-    @PostMapping("/saveCoupon")
+    @PostMapping("/saveCoupon")  // esta ruta esta en los html
     public String save(Coupon coupon) {
         repo.save(coupon);
         return "createResponse";
