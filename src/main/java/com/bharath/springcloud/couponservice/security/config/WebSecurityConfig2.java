@@ -20,11 +20,15 @@ public class WebSecurityConfig2 {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin();
         http.authorizeHttpRequests() //nofunciona!!
-                .requestMatchers(HttpMethod.GET, "/couponapi/coupons/{code:^[A-Z]*$}","/")
+                .requestMatchers(HttpMethod.GET, "/couponapi/coupons/{code:^[A-Z]*$}","/", "/showGetCoupon",
+                        "/getCoupon", "/couponDetails")
                 .hasAnyRole("USER","ADMIN")
                 .requestMatchers(HttpMethod.GET,"/showCreateCoupon", "/createCoupon", "/createResponse")
                 .requestMatchers(HttpMethod.POST, "/couponapi/coupons")
-                .hasRole("ADMIN").and()
+                .hasRole("ADMIN").
+                .requestMatchers(HttpMethod.POST,"/getCoupon")
+                .hasAnyRole("USER","ADMIN")
+                .and()
                 .csrf().disable();
         return http.build();
     } */
