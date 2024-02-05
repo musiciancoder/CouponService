@@ -11,12 +11,23 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 @Configuration
 public class WebSecurityConfig2 {
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    @Bean
+    SecurityContextRepository securityContextRepository(){
+        return new DelegatingSecurityContextRepository(
+                new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository()
+        );
+    }
 
     @Bean
     AuthenticationManager authManager(){
@@ -46,6 +57,8 @@ public class WebSecurityConfig2 {
                 .hasAnyRole("USER","ADMIN")
                 .and()
                 .csrf().disable();
+
+        http.securityContext(securityContext->securityContext.requireExplicitSave(true)); //starting from spring 3.2 this is required for custom login
         return http.build();
     }
 
