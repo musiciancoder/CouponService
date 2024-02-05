@@ -1,14 +1,30 @@
 package com.bharath.springcloud.couponservice.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig2 {
+
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    @Bean
+    AuthenticationManager authManager(){
+      DaoAuthenticationProvider provider =  new DaoAuthenticationProvider();
+    provider.setUserDetailsService(userDetailsService);
+    provider.setPasswordEncoder(bCryptPasswordEncoder());
+    return new ProviderManager(provider);
+    }
 
 
     @Bean
@@ -16,7 +32,7 @@ public class WebSecurityConfig2 {
         return new BCryptPasswordEncoder();
     }
 
-  /*  @Bean
+    @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin();
         http.authorizeHttpRequests() //nofunciona!!
@@ -31,7 +47,7 @@ public class WebSecurityConfig2 {
                 .and()
                 .csrf().disable();
         return http.build();
-    } */
+    }
 
 
 }
