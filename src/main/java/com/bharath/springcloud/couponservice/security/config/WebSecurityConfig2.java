@@ -57,7 +57,7 @@ public class WebSecurityConfig2 {
                 .hasAnyRole("USER","ADMIN")
                 .requestMatchers("/","login","/showReg","/registerUser").permitAll() //esto es para custom login
                 .and().logout().logoutSuccessfulUrl("/") //para logout con custom login
-                .and().csrf().disable();
+             //   .and().csrf().disable(); //cuando no tiene esta linea CSRF is enabled
 
         http.securityContext(context->context.requireExplicitSave(true)); //starting from spring 3.2 this is required for custom login
         return http.build();

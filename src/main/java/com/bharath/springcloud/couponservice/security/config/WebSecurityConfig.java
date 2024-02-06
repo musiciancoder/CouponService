@@ -5,6 +5,7 @@ package com.bharath.springcloud.couponservice.security.config;
 import java.util.List;
 
 import com.bharath.springcloud.couponservice.security.UserDetailsServiceImpl;
+import jdk.internal.joptsimple.util.RegexMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import javax.servlet.http.HttpServletRequest;
 
 
 //@Configuration
@@ -45,6 +51,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta cla
                 .mvcMatchers("/", "/login", "/logout", "/showReg", "/registerUser").permitAll().anyRequest().denyAll()
                 .and().logout().logoutSuccessUrl("/");
 
+        //con esto customizamos qué urls no queremos que tengam CSRF
+        http.csrf(csrfCustomizar->{
+            csrfCustomizar.ignoringAntMatchers("/couponapi/coupons/**");
+            RequestMatcher requestMatchers=new RegexRequestMatcher("/couponapi/coupons/{code:^[A-Z]*$}","POST");
+           requestMatchers = new MvcRequestMatcher(new HandlerMappingIntrospector(),"/getCoupon");
+            csrfCustomizar.ignoringAntMatchers(String.valueOf(requestMatchers));
+
+
+        });
     }
 
     @Bean
