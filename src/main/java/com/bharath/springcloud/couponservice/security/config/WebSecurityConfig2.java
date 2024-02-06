@@ -56,8 +56,8 @@ public class WebSecurityConfig2 {
                 .requestMatchers(HttpMethod.POST,"/getCoupon")
                 .hasAnyRole("USER","ADMIN")
                 .requestMatchers("/","login").permitAll() //esto es para custom login
-                .and()
-                .csrf().disable();
+                .and().logout().logoutSuccessfulUrl("/") //para logout con custom login
+                .and().csrf().disable();
 
         http.securityContext(context->context.requireExplicitSave(true)); //starting from spring 3.2 this is required for custom login
         return http.build();
