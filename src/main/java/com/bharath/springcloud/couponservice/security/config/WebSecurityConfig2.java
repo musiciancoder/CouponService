@@ -55,7 +55,7 @@ public class WebSecurityConfig2 {
                 .hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/getCoupon")
                 .hasAnyRole("USER","ADMIN")
-                .requestMatchers("/","login").permitAll() //esto es para custom login
+                .requestMatchers("/","login","/showReg","/registerUser").permitAll() //esto es para custom login
                 .and().logout().logoutSuccessfulUrl("/") //para logout con custom login
                 .and().csrf().disable();
 
