@@ -58,7 +58,7 @@ public class WebSecurityConfig2 {
                 .and()
                 .csrf().disable();
 
-        http.securityContext(securityContext->securityContext.requireExplicitSave(true)); //starting from spring 3.2 this is required for custom login
+        http.securityContext(context->context.requireExplicitSave(true)); //starting from spring 3.2 this is required for custom login
         return http.build();
     }
 
