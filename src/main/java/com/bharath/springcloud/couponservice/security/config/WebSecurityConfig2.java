@@ -45,16 +45,17 @@ public class WebSecurityConfig2 {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin();
+     //   http.formLogin(); //no lo necesitamos con custom login
         http.authorizeHttpRequests() //nofunciona!!
                 .requestMatchers(HttpMethod.GET, "/couponapi/coupons/{code:^[A-Z]*$}","/", "/showGetCoupon",
                         "/getCoupon", "/couponDetails")
                 .hasAnyRole("USER","ADMIN")
                 .requestMatchers(HttpMethod.GET,"/showCreateCoupon", "/createCoupon", "/createResponse")
                 .requestMatchers(HttpMethod.POST, "/couponapi/coupons")
-                .hasRole("ADMIN").
+                .hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/getCoupon")
                 .hasAnyRole("USER","ADMIN")
+                .requestMatchers("/","login").permitAll() //esto es para custom login
                 .and()
                 .csrf().disable();
 

@@ -29,8 +29,8 @@ public class SecurityServiceImpl implements SecurityService {
 
     //esto es para implementar un custom login
     @Override
-    public boolean login(String userName, String password //antes de 3.2
-    , HttpServletRequest request, HttpServletResponse response) { //despues de 3.2. se requieren estos parametros adicionales
+    public boolean login(String userName, String password //
+    , HttpServletRequest request, HttpServletResponse response) { // se requieren estos parametros adicionales para salvar en el security context
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
         UsernamePasswordAuthenticationToken token =  new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         authenticationManager.authenticate(token); // se lo pasamos al authentication manager
