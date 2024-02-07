@@ -51,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta cla
                 .mvcMatchers("/", "/login", "/logout", "/showReg", "/registerUser").permitAll().anyRequest().denyAll()
                 .and().logout().logoutSuccessUrl("/");
 
-        //con esto customizamos qué urls no queremos que tengam CSRF
+        //con esto customizamos qué urls no queremos que tengam CSRF. Lo dejo comentado en la seccion de CORS
+      /*
         http.csrf(csrfCustomizar->{
             csrfCustomizar.ignoringAntMatchers("/couponapi/coupons/**");
             RequestMatcher requestMatchers=new RegexRequestMatcher("/couponapi/coupons/{code:^[A-Z]*$}","POST");
@@ -59,6 +60,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta cla
             csrfCustomizar.ignoringAntMatchers(String.valueOf(requestMatchers));
 
 
+        });
+
+       */
+
+        //CORS Personalizados.
+        http.cors(corsCustomizer->{
+            CorsConfigurationSource configurationSource=request->{
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowedOrigins(List.of("localhost:3000"));
+                corsConfiguration.setAllowedMethods(List.of("GET"));
+                return corsConfiguration;
+            };
+            corsCustomizer.configurationSource(configurationSource);
         });
     }
 
