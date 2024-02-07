@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,7 +47,8 @@ public class WebSecurityConfig2 {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
      //   http.formLogin(); //no lo necesitamos con custom login
-        http.authorizeHttpRequests() //nofunciona!!
+      //  http.httpBasic(Customizer.withDefaults());
+        http.authorizeRequests()
                 .requestMatchers(HttpMethod.GET, "/couponapi/coupons/{code:^[A-Z]*$}","/", "/showGetCoupon",
                         "/getCoupon", "/couponDetails")
                 .hasAnyRole("USER","ADMIN")
@@ -56,7 +58,7 @@ public class WebSecurityConfig2 {
                 .requestMatchers(HttpMethod.POST,"/getCoupon")
                 .hasAnyRole("USER","ADMIN")
                 .requestMatchers("/","login","/showReg","/registerUser").permitAll() //esto es para custom login
-                .and().logout().logoutSuccessfulUrl("/") //para logout con custom login
+                .and().logout().logoutSuccessfulUrl("/") ;//para logout con custom login
              //   .and().csrf().disable(); //cuando no tiene esta linea CSRF is enabled
 
         http.securityContext(context->context.requireExplicitSave(true)); //starting from spring 3.2 this is required for custom login
