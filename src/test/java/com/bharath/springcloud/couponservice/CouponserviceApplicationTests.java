@@ -1,10 +1,8 @@
 package com.bharath.springcloud.couponservice;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 import org.junit.jupiter.api.Test;
@@ -59,6 +57,20 @@ class CouponserviceApplicationTests {
 		mvc.perform(post("/couponapi/coupons")
 				.content("{\"code":\"SUPERSALECSRF\",\"discount\":80.000,\"espDate\":\"12/12/2020\"}")
 		.contentType(MediaType.APPLICATION_JSON).with(csrf().asHeader())).andExpect(status().isForbidden());
+
+	}
+
+
+	//CORS
+	@Test
+	@WithMockUser(roles= {"USER"})
+	public void testCORS() throws Exception {
+		mvc.perform(options("/couponapi/coupons").header("Access-Control-Request-Method","POST").header("Origin",
+				"http://www.bharath.com")).andExpect(status().isOk())
+				.andExpect(header().exists("Access-Control-Allow-Origin"))
+				.andExpect(header().string("Access-Control-Allow-Origin","*"))
+				.andExpect(header().exists("Access-Control-Allow-Methods"))
+				.andExpect(header().string("Access-Control-Allow-Methods","POST"));
 
 	}
 
