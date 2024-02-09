@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,10 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import javax.servlet.http.HttpServletRequest;
 
 
-//@Configuration
+@Configuration
+//@EnableMethodSecurity //dijo q esto se usaba en vez de @EnableGlobalMethodSecurity en las versiones mas nuevas
+@EnableGlobalMethodSecurity(prePostEnabled=true) //Lo agregó en sección "level security method".
+//@EnableGlobalMethodSecurity(prePostEnabled=true, jsr250Enabled = true, securedEnabled = true) Esto es para usar en el controlador @ROLESALLOWED y @SECURITY respectivamente, q se usaba en versiones anteriores
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta clase la copié y pegué desde github, en vista y considerando que apareció por arte de magia en la clase llamada "Test".
    // Apartir de este punto el código me dejó de funcionar, por lo que solo sirve como apoyo para ver apuntes.
 
@@ -41,7 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta cla
     //En este método definió q para leer un cupon (con la peticion GET) cualquier rol puede hacerlo, pero para crear un cupon (peticion POST) tiene que tener rol "ADMIN".
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        //Lo comentó en sección "level security method"
+    /*    http.authorizeRequests()
                 .mvcMatchers(HttpMethod.GET, "/couponapi/coupons/{code:^[A-Z]*$}", "/index", "/showGetCoupon",
                         "/getCoupon", "/couponDetails")
                 .hasAnyRole("USER", "ADMIN")
@@ -50,6 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { //esta cla
                 .mvcMatchers(HttpMethod.POST, "/couponapi/coupons", "/saveCoupon", "/getCoupon").hasRole("ADMIN")
                 .mvcMatchers("/", "/login", "/logout", "/showReg", "/registerUser").permitAll().anyRequest().denyAll()
                 .and().logout().logoutSuccessUrl("/");
+
+     */
 
         //con esto customizamos qué urls no queremos que tengam CSRF. Lo dejo comentado en la seccion de CORS
       /*
